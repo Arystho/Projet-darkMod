@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * This function allows you to initialize my functions
+ */
+
+function init() {
+    darkmod()
+    newsletter()
+    inscription()
+}
+init();
+
+/**
+ * Display the darkMod when you click on the button :
+ * afficher le darkMod quand on clic sur le bouton 
+ */
+
+function darkmod() {
+    const darkmod = document.querySelector("#darkmode");
+    const body = document.querySelector("body")
+
+    darkmod.addEventListener("click", (e) => {
+        if (body.classList.contains("darkmondeon") == false) {
+            body.classList.add("darkmondeon")
+            const logos = document.querySelector("#logo");
+            logos.src = "img/logo-blanc.png"
+        } else {
+            body.classList.remove("darkmondeon")
+            const logos = document.querySelector("#logo");
+            logos.src = "img/logo-noir.png"
+        }
+    });
+}
+
+/**
+ * Make my button functional and receive a newsletter :
+ * Rendre mon bouton fonctionnel et recevoir un newsletter
+ * 
+ */
+
+function newsletter() {
+    const newsLetters = document.querySelector("#newsletter");
+
+    newsLetters.addEventListener("click", (e) => {
+
+        //Modal which closes by slamming on the cross : "modale qui se ferme en claquant sur la croix "
+        const newDiv = document.createElement("div");
+
+        newDiv.innerHTML = `
+        &lt;i class="fa-solid fa-xmark xmark">&lt;/i>
+        &lt;input type="text" id="email" placeholder="Entrez votre email">
+        &lt;button class="link"> recevoir un newsletter &lt;/button>
+        `;
+        newDiv.classList.add("form-container");
+        document.body.appendChild(newDiv);
+        const icone = document.querySelector(".xmark");
+        icone.addEventListener("click", (e) => {
+            newDiv.remove();
+        });
+
+
+        //Make my "receive Newsletter" button functional : "Rendre mon bouton "Recevoir la newsletter" fonctionnel"
+        const buttonLink = document.querySelector(".link");
+        buttonLink.addEventListener("click", (e) => {
+            const email = document.querySelector("#email")
+            if (validateEmail(email.value)) {
+                newDiv.remove();
+
+                //Modal that changes when you enter an email, creat the élément : "modale qui change quand on rentre un email, creation d'un élément "
+                const textEmail = document.createElement("div");
+
+                textEmail.innerHTML = `
+        &lt;i class="fa-solid fa-xmark xmark">&lt;/i>
+        &lt;p>Félicitation pour votre inscription à la newsletter &lt;/p>
+        `;
+                textEmail.classList.add("form-container");
+                document.body.appendChild(textEmail);
+                const icone = document.querySelector(".xmark");
+                icone.addEventListener("click", (e) => {
+                    console.log("dgdsfds")
+                    textEmail.remove();
+                });
+            } else {
+                alert("Email invalide ! ");
+            }
+        });
+    })
+}
+
+/**
+ * E-mail validation
+ * 
+ * @param {String} email - Email 
+ * @returns {Boolean} 
+ */
+
+function validateEmail(email) {
+    const mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return mail.test(String(email).toLowerCase());
+}
+
+/**
+ * Creation of the first contact form :
+ * Creation du premier formulaire de contact 
+ */
+
+function inscription() {
+    const contactInsc = document.querySelector("#contact-button");
+    const dialogClick = document.createElement("dialog");
+
+    dialogClick.innerHTML = `
+        &lt;i class="fa-solid fa-xmark xmark">&lt;/i>
+        &lt;h2>Contactez-nous&lt;/h2>
+        &lt;div>
+        &lt;input id="fullname" type="text" placeholder="Votre nom et Prénom">
+        &lt;input type="text" placeholder="Votre numéro de téléphone">
+        &lt;input type="text" placeholder="Le nom de votre entreprise">
+        &lt;input type="text" placeholder="Votre adresse mail">
+        &lt;label for="renseignement">Je veux des renseignements concernant l'accompagnement perso&lt;/label>
+        &lt;select id="renseignement" name="list" form="form">
+        &lt;option value="perso" > Je veux des renseignement concernant l'accompagnement perso &lt;/option>
+        &lt;option value="group" > Je veux des renseignement concernant l'accompagnement small group &lt;/option> 
+        &lt;option value="digital"> Je veux des renseignements concernant la formation digitale &lt;/option>
+        &lt;option value="coaching"> Je veux des renseignements concernant le coaching digital &lt;/option>
+        &lt;option value="autre"> J'ai une autre demande &lt;/option>
+        &lt;/select>
+        &lt;textarea name="text" id="message">&lt;/textarea>
+        &lt;label>
+        &lt;input type="checkbox" placeholder="Votre nom et Prénom" required>
+        &lt;p>En soumettant ce formulaire, j'accepte que les information saisies soient transmise par mail à l'équipe de SkillFacile dans le but d'être recontacté concernant la demande effectuée. Je comprends que j'ai un droit de modification, d'àces et de suppression de mes informations personnelles.
+        &lt;/label>
+        &lt;button class="clic">Envoyer la demande&lt;/button>
+        &lt;/div>
+        `;
+    dialogClick.classList.add(".form-container");
+    document.body.appendChild(dialogClick);
+
+    //Click on the icon to close the form : "clic sur l'icone pour fermer le formulaire" 
+    const icone = document.querySelector(".xmark");
+    icone.addEventListener("click", (e) => {
+        dialogClick.close()
+    })
+    contactInsc.addEventListener("click", (e) => {
+        // sélectionner la balise dialog
+        dialogClick.showModal();
+    });
+}
+
+/**
+ * When you press the button the page changes : 
+ * Quand on appuis sur le bouton le page change 
+ */
+
+function validInsc() {
+    const buttonClick = document.querySelector(".clic");
+    buttonClick.addEventListener("click", (e) => {
+        // On essaie d'envoyer le formulaire
+        let isValid = true;
+        // On test chacun des champs
+        const fullname = document.querySelector("#fullname")
+
+        if (fullname.value.trim() === "" || fullname.value.trim().length &lt;= 2) {
+            // Ce n'est pas bon, on affiche un message d'erreur
+            isValid = false
+        }
+
+        // Tester num de téléphone
+
+        // En arrivant ici, on test si isValid est égal à true
+        if (isValid === true) {
+            dialogClick.innerHTML = `
+                &lt;i class="fa-solid fa-xmark xmark">&lt;/i>
+                &lt;h2>Contactez-nous&lt;/h2>
+                &lt;p>Votre message à bien été envoyé&lt;/p>
+                `;
+            const icone = document.querySelector(".xmark");
+            icone.addEventListener("click", (e) => {
+                dialogClick.remove();
+            });
+        }
+    });
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#darkmod">darkmod</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#inscription">inscription</a></li><li><a href="global.html#newsletter">newsletter</a></li><li><a href="global.html#validInsc">validInsc</a></li><li><a href="global.html#validateEmail">validateEmail</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Jul 03 2024 13:52:55 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
